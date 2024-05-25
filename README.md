@@ -19,7 +19,7 @@ HLS to Video is a web application that converts m3u8 streams to mp4 video files.
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/joshholly/hls-to-video.git
+    git clone https://github.com/joshholly/m3u8Convert.git
     cd hls-to-video-by-vidbinge
     ```
 
