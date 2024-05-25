@@ -146,7 +146,7 @@ app.get('/', (req, res) => {
 app.get('/download', (req, res) => {
   const fileId = req.query.fileId;
   if (!fileId || !convertedFiles[fileId]) {
-    return res.status(400).send('Invalid file ID. File likely already downloaded. Please check your Downloads.');
+    return res.status(400).send('Invalid file ID.');
   }
 
   const { filePath } = convertedFiles[fileId];
@@ -155,7 +155,6 @@ app.get('/download', (req, res) => {
     if (err) {
       console.error('Error sending file:', err);
     }
-    // Do not delete the file after download
   });
 });
 
