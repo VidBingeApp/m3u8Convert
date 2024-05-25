@@ -58,6 +58,15 @@ HLS to Video is a web application that converts m3u8 streams to mp4 video files.
     PUSHER_SECRET=your_pusher_secret
     PUSHER_CLUSTER=your_pusher_cluster
     ```
+
+### FOR ADVANCED USERS ONLY
+
+If you prefer to set your environment variables directly in the application setup (e.g., through your hosting provider's interface) rather than using a `.env` file, follow these steps:
+
+1. Remove the line `require('dotenv').config();` from the top of `app.js`.
+2. Ensure your Pusher credentials (`PUSHER_APP_ID`, `PUSHER_KEY`, `PUSHER_SECRET`, `PUSHER_CLUSTER`) are correctly set as environment variables in your application setup.
+
+
 ## Usage
 
 1. Start the server:
