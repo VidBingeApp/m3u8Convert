@@ -58,17 +58,6 @@ HLS to Video is a web application that converts m3u8 streams to mp4 video files.
     PUSHER_SECRET=your_pusher_secret
     PUSHER_CLUSTER=your_pusher_cluster
     ```
-
-5. Update the Pusher key and cluster in `index.html`:
-
-    Open `index.html` and replace `PUSHER_KEY` and `PUSHER_CLUSTER` with your Pusher key and cluster:
-
-    ```javascript
-    var pusher = new Pusher('PUSHER_KEY', {
-      cluster: 'PUSHER_CLUSTER'
-    });
-    ```
-
 ## Usage
 
 1. Start the server:
