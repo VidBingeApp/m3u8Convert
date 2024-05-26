@@ -7,7 +7,7 @@ const fs = require('fs');
 const Pusher = require('pusher');
 
 const app = express();
-const port = 3000;
+const port = 3002;
 
 const pusher = new Pusher({
   appId: process.env.PUSHER_APP_ID,
@@ -59,7 +59,6 @@ function cleanupOldFiles() {
 // Run cleanup every hour
 setInterval(cleanupOldFiles, 60 * 60 * 1000); // 1 hour in milliseconds
 
-
 app.get('/', (req, res) => {
   const url = req.query.url;
   if (!url) {
@@ -83,15 +82,15 @@ app.get('/', (req, res) => {
       <script src="https://cdn.tailwindcss.com"></script>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
-    <body class="bg-gray-200 flex items-center justify-center min-h-screen">
-      <div class="bg-white p-8 rounded-lg shadow-lg text-center">
-        <h1 class="text-2xl text-pretty font-bold mb-4">HLS to Video Conversion powered by VidBinge</h1>
-        <h2 class="text-xl font-bold mb-4">Conversion Progress</h2>
-        <div class="flex w-full h-1.5 bg-gray-200 rounded-full overflow-hidden" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-          <div id="progress-bar" class="flex flex-col justify-center rounded-full overflow-hidden bg-blue-600 text-xs text-white text-center whitespace-nowrap transition duration-500" style="width: 0%"></div>
+    <body class="bg-[#000A12] flex items-center justify-center min-h-screen">
+      <div class="bg-[#1D1728] p-8 rounded-lg shadow-lg text-center mx-2 md:mx-0">
+        <h1 class="text-2xl text-white text-pretty font-bold mb-4">HLS to Video Conversion powered by VidBinge</h1>
+        <h2 class="text-xl text-white font-bold mb-4">Conversion Progress</h2>
+        <div class="flex w-full h-1.5 bg-[#e5e7eb] rounded-full overflow-hidden" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+          <div id="progress-bar" class="flex flex-col justify-center rounded-full overflow-hidden bg-[#8652bb] text-xs text-white text-center whitespace-nowrap transition duration-500" style="width: 0%"></div>
         </div>
-        <div id="status" class="mt-2 text-lg">Starting...</div>
-        <div id="download-link" class="mt-4 text-blue-500 hidden"><a href="/download?fileId=${fileId}" target="_blank">Download doesn't start automatically? Click here to download</a></div>
+        <div id="status" class="mt-2 text-lg text-white">Starting...</div>
+        <div id="download-link" class="mt-4 text-[#8652bb] hidden"><a class="font-bold hover:text-underline" href="/download?fileId=${fileId}" target="">Download doesn't start automatically? Click here to download</a></div>
       </div>
       <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
       <script>
@@ -107,16 +106,20 @@ app.get('/', (req, res) => {
           const statusText = document.getElementById('status');
           const downloadLink = document.getElementById('download-link');
           const progress = data.progress;
-          progressBar.style.width = progress + '%';
-          progressBar.setAttribute('aria-valuenow', progress);
-          if (progress === 100) {
-            statusText.innerText = 'Conversion complete! Starting download...';
-            downloadLink.classList.remove('hidden');
-            setTimeout(() => {
-              window.location.href = '/download?fileId=${fileId}';
-            }, 1000);
+          if (progress === 'error') {
+            statusText.innerText = 'Error converting file. Please check the m3u8 URL and try again.';
           } else {
-            statusText.innerText = \`Conversion progress: \${progress}%\`;
+            progressBar.style.width = progress + '%';
+            progressBar.setAttribute('aria-valuenow', progress);
+            if (progress === 100) {
+              statusText.innerText = 'Conversion complete! Starting download...';
+              downloadLink.classList.remove('hidden');
+              setTimeout(() => {
+                window.location.href = '/download?fileId=${fileId}';
+              }, 1000);
+            } else {
+              statusText.innerText = \`Conversion progress: \${progress}%\`;
+            }
           }
         });
       </script>
