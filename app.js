@@ -20,8 +20,6 @@ const pusher = new Pusher({
 const tmpDir = path.join(__dirname, 'tmp');
 const fileExpirationTime = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
-let convertedFiles = {}; // Store conversion status and file paths
-
 // Ensure the tmp directory exists
 if (!fs.existsSync(tmpDir)) {
   fs.mkdirSync(tmpDir, { recursive: true });
@@ -68,8 +66,6 @@ app.get('/', (req, res) => {
   const fileId = uuidv4();
   const filename = `${fileId}.mp4`;
   const outputPath = path.join(tmpDir, filename);
-
-  convertedFiles[fileId] = { status: 'processing', filePath: outputPath };
 
   const pusherKey = process.env.PUSHER_KEY;
   const pusherCluster = process.env.PUSHER_CLUSTER;
@@ -148,11 +144,11 @@ app.get('/', (req, res) => {
 
 app.get('/download', (req, res) => {
   const fileId = req.query.fileId;
-  if (!fileId || !convertedFiles[fileId]) {
+  const filePath = path.join(tmpDir, `${fileId}.mp4`);
+  
+  if (!fileId || !fs.existsSync(filePath)) {
     return res.status(400).send('Invalid file ID.');
   }
-
-  const { filePath } = convertedFiles[fileId];
 
   res.download(filePath, (err) => {
     if (err) {
